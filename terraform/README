@@ -1,0 +1,11 @@
+## Run below command to intialize terraform.
+
+terraform init
+
+## Run terraform plan to verify the resources getting created
+
+terraform plan
+
+## Run terraform apply to apply the changes
+
+terraform apply

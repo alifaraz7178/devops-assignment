@@ -1,0 +1,11 @@
+##Run below docker command to create image.
+
+docker build -t <repo-name>/<image-name>:<tag-name> .
+
+example:
+
+docker build -t alifaraz7178/webapp:1.0.0 .
+
+##Push image to repo
+
+docker push <repo-name>/<image-name>:<tag-name>
