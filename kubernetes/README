@@ -1,0 +1,60 @@
+Please Follow below steps to create ALB ingress, Deploy application and setup HPA
+
+1) Create IAM OIDC provide
+
+eksctl utils associate-iam-oidc-provider \
+    --region <region> \
+    --cluster <eks cluster name> \
+    --approve
+
+2) Create policy ALBIngressControllerIAMPolicy to give access to ingress controlles to create AWS instances.
+
+aws iam create-policy \
+    --policy-name ALBIngressControllerIAMPolicy \
+    --policy-document file://iam-policy.json
+
+3)Create a Kubernetes service account named alb-ingress-controller in the kube-system namespace, a cluster role, and a cluster role binding for the ALB Ingress Controller to use with the following command
+
+kubectl apply -f rbac-role-alb-ingress-controller.yaml
+
+4)Create role, add trust relationship
+
+aws iam create-role --role-name eks-alb-ingress-controller --assume-role-policy-document file://trust.json
+
+5) Attach the ALBIngressControllerIAMPolicy to the alb role
+
+aws iam attach-role-policy --role-name eks-alb-ingress-controller --policy-arn=<ARN of the created policy>
+
+6)Annotate the controller pod to use the role
+
+kubectl annotate serviceaccount -n kube-system alb-ingress-controller \
+eks.amazonaws.com/role-arn=<role-arn>
+
+7)Add the following policies to the alb role
+
+aws iam attach-role-policy --role-name eks-alb-ingress-controller --policy-arn arn:aws:iam::aws:policy/AmazonEKSWorkerNodePolicy
+aws iam attach-role-policy --role-name eks-alb-ingress-controller --policy-arn arn:aws:iam::aws:policy/AmazonEKS_CNI_Policy
+
+8)Deploy ingress Controller
+
+kubectl apply -f alb-ingress-controller.yaml
+
+9) Create webapp namespace
+
+kubectl create namespace webapp
+
+10) Deploy application
+
+kubectl apply -f deployment.yaml
+
+11) Attach Service object
+
+kubectl apply -f service.yaml
+
+12) Deploy Ingress
+
+kubectl apply -f ingress.yaml
+
+13) Deploy horizontal pod scaling
+
+kubectl apply -f hpa.yaml

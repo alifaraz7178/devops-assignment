@@ -1,0 +1,17 @@
+{
+   "Version":"2012-10-17",
+   "Statement":[
+      {
+         "Effect":"Allow",
+         "Principal":{
+            "Federated":"arn:aws:iam::208859229440:oidc-provider/oidc.eks.us-east-1.amazonaws.com/id/0269C0F807054A15AB85F51E9CDFB3FE"
+         },
+         "Action":"sts:AssumeRoleWithWebIdentity",
+         "Condition":{
+            "StringEquals":{
+               "oidc.eks.us-east-1.amazonaws.com/id/0269C0F807054A15AB85F51E9CDFB3FE:sub":"system:serviceaccount:kube-system:alb-ingress-controller"
+            }
+         }
+      }
+   ]
+}
