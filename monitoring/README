@@ -1,0 +1,15 @@
+Install Prometheus Operator.
+
+helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
+helm repo add stable https://kubernetes-charts.storage.googleapis.com/
+helm repo update
+
+
+Install charts
+
+helm install monitoring prometheus-community/kube-prometheus-stack
+
+
+Create Service Operator for Web Application
+
+Kubectl apply -f monitor.yaml
