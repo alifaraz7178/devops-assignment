@@ -1,5 +1,5 @@
-
 from flask import Flask
+from flask_prometheus import monitor
 
 app = Flask(__name__)
 
@@ -21,5 +21,6 @@ def info(data):
         return "<h1>Bad Gateway</h1>", 502
     else:
         return "Enter Correct Parameter"
-if __name__ == '__main__':
-    app.run(debug=True, host='0.0.0.0')
+
+monitor(app, port=8000)
+app.run()

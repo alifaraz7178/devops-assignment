@@ -2,7 +2,6 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: web-deployment
-  namespace: webapp
   labels:
     app: webapp
 spec:
@@ -17,13 +16,11 @@ spec:
     spec:
       containers:
       - name: nginx
-        image: alifaraz7178/nginx:1.0.0
+        image: alifaraz7178/nginx:1.2.0
         ports:
         - containerPort: 80
+
       - name: webapp
-        image: alifaraz7178/webapp:1.0.0
-        env:
-          - name: INSTANA_AGENT_HOST
-            valueFrom:
-              fieldRef:
-                fieldPath: status.hostIP
+        image: alifaraz7178/webapp:1.1.14
+        ports:
+        - containerPort: 5000
